@@ -15,7 +15,7 @@ export class MovieService {
     }
 
     public getByTitle(title: string): Promise<MovieModel[]> {
-        this.uri = `${this.api}/title/${title}`;
+        this.uri = `${this.api}/byTitle?t=${title}`;
         return this.httpClient();
     }
 
