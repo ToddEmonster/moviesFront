@@ -41,7 +41,7 @@ export class SpinnerLoader {
         inner.addClass('inner-loader');
 
         const spinner: JQuery = $('<img>');
-        spinner.attr('src', '/assets/images/loader.gif');
+        spinner.attr('src', '/assets/images/blue-cat-spinner.gif');
         
         // Stack DOM elements into loader property
         inner.append(spinner); // Stack spinner into inner

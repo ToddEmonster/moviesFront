@@ -4,7 +4,7 @@ import { ManageCheckbox } from "./manage-checkbox";
 import { SpinnerLoader } from "./spinner-loader";
 import { MovieService } from './services/movie-service';
 import { MovieModel } from './models/movie-model';
-import { SearchComponent } from './search-component';
+import { SearchComponent } from './components/search-component';
 
 /**
  * @name Main

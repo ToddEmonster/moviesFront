@@ -9451,6 +9451,138 @@ module.exports = function (module) {
 
 /***/ }),
 
+/***/ "./src/components/row/row-component.ts":
+/*!*********************************************!*\
+  !*** ./src/components/row/row-component.ts ***!
+  \*********************************************/
+/*! exports provided: RowComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RowComponent", function() { return RowComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+class RowComponent {
+    constructor(movie) {
+        this.movie = movie;
+    }
+    load() {
+        return new Promise((resolve) => {
+            jquery__WEBPACK_IMPORTED_MODULE_0__["get"]('/src/components/row/view/row.view.html', (view) => {
+                const jqView = jquery__WEBPACK_IMPORTED_MODULE_0__(view);
+                jqView.find('[title]').html(this.movie.title);
+                jqView.find('[more]')
+                    .attr('data-rel', this.movie.id);
+                resolve(jqView);
+            });
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/components/search-component.ts":
+/*!********************************************!*\
+  !*** ./src/components/search-component.ts ***!
+  \********************************************/
+/*! exports provided: SearchComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/movie-service */ "./src/services/movie-service.ts");
+/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../models/movie-model */ "./src/models/movie-model.ts");
+/* harmony import */ var _row_row_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./row/row-component */ "./src/components/row/row-component.ts");
+/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../manage-checkbox */ "./src/manage-checkbox.ts");
+/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../spinner-loader */ "./src/spinner-loader.ts");
+
+
+
+
+
+
+class SearchComponent {
+    // Dès qu'on instancie la classe, il construit l'instance avec ses deux attributs :
+    // - l'attribut service est une nouvelle instanciation d'un MovieService, qui sera utilisée dans la méthode privée
+    // - la méthode privée _setHandlers qu'on a définie plus bas, c'est elle qui fait tout
+    constructor() {
+        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
+        this.movies = new Array();
+        this.spinner = new _spinner_loader__WEBPACK_IMPORTED_MODULE_5__["SpinnerLoader"]();
+        this._setHandler();
+    }
+    // Methode privée de la classe
+    _setHandler() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', // Dès qu'on relâche la touche, l'événement se déclenche
+        (event) => {
+            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
+            // SI il y a au moins 2 caractères recherchés
+            if (searchField.val().toString().trim().length >= 2) {
+                this.spinner.present();
+                // Call service...
+                // Je récupère le movie dont le titre partiel correspond à la recherche
+                this.service.getByTitle(searchField.val().toString().trim())
+                    // et à ce moment-là je crée une instance movies de type "tableau d'éléments de type MovieModel"
+                    .then((movies) => {
+                    if (!this._compareTo(movies)) {
+                        this.movies = movies;
+                        this._removeRows();
+                        // Pour chaque élément movie au sein de movies, qu'on suit avec son index
+                        movies.forEach((movie, index) => {
+                            const rowComponent = new _row_row_component__WEBPACK_IMPORTED_MODULE_3__["RowComponent"](movie);
+                            // Pour tout rang du movie, l'ajouter au tableau tbody
+                            rowComponent.load().then((row) => {
+                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                            });
+                        });
+                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
+                    }
+                });
+                this.spinner.dismiss();
+            }
+            else {
+                // Removes all previous rows
+                this._removeRows();
+                this.movies = [];
+            }
+        });
+        // "Dès qu'il y a une recherche, on efface TOUS les rows"
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
+            this._removeRows();
+        });
+    }
+    _removeRows() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
+    }
+    _compareTo(movies) {
+        let isEqual = false;
+        const input = movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        const state = this.movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        if (state.length !== 0) {
+            if (input.length === state.length) {
+                state.forEach((stateMovie, index) => {
+                    if (stateMovie.compareTo(input[index])) {
+                        isEqual = true;
+                    }
+                    else {
+                        isEqual = false;
+                    }
+                });
+            }
+        }
+        return isEqual;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -9461,7 +9593,7 @@ module.exports = function (module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
-/* harmony import */ var _search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./search-component */ "./src/search-component.ts");
+/* harmony import */ var _components_search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/search-component */ "./src/components/search-component.ts");
 
 
 /**
@@ -9477,7 +9609,7 @@ class Main {
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
         loader.dismiss();
-        const searchComponent = new _search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
+        const searchComponent = new _components_search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
     }
 }
 // Main app instanciation
@@ -9490,14 +9622,135 @@ document.addEventListener('DOMContentLoaded', // Event to listen...
 
 /***/ }),
 
-/***/ "./src/search-component.ts":
-/*!*********************************!*\
-  !*** ./src/search-component.ts ***!
-  \*********************************/
-/*! exports provided: SearchComponent */
-/***/ (function(module, exports) {
+/***/ "./src/manage-checkbox.ts":
+/*!********************************!*\
+  !*** ./src/manage-checkbox.ts ***!
+  \********************************/
+/*! exports provided: ManageCheckbox */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module parse failed: Unexpected token (34:53)\nFile was processed with these loaders:\n * ./node_modules/ts-loader/index.js\nYou may need an additional loader to handle the result of these loaders.\n|                         // Pour tout rang du movie, l'ajouter au tableau tbody\n|                         rowComponent.load().then((row) => {\n>                             const responseFromBack = .append(row); // ça c'est le contenu \n|                             // $('tbody').append(row);\n|                         });");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManageCheckbox", function() { return ManageCheckbox; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * @name ManageCheckbox
+ * @author Aélion - Feb. 2020
+ * @version 1.0.0
+ *  Manage checkboxes of the movies / actors table
+ */
+class ManageCheckbox {
+    constructor() {
+        this._setHandlers();
+    }
+    _setHandlers() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').on('click', // Event to listen to
+        (event) => {
+            jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
+        });
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').on('click', '.check-row', (event) => {
+            const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
+            jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/models/movie-model.ts":
+/*!***********************************!*\
+  !*** ./src/models/movie-model.ts ***!
+  \***********************************/
+/*! exports provided: MovieModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MovieModel", function() { return MovieModel; });
+class MovieModel {
+    get id() {
+        return this._id;
+    }
+    get title() {
+        return this._title;
+    }
+    get year() {
+        return this._year;
+    }
+    static compare(a, b) {
+        if (a.id < b.id) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
+    }
+    compareTo(movie) {
+        return this._id === movie.id;
+    }
+    deserialize(movie) {
+        //Object.assign(this, movie);
+        this._id = movie.idMovie;
+        this._title = movie.title;
+        this._year = movie.year;
+        return this;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/services/movie-service.ts":
+/*!***************************************!*\
+  !*** ./src/services/movie-service.ts ***!
+  \***************************************/
+/*! exports provided: MovieService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MovieService", function() { return MovieService; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../models/movie-model */ "./src/models/movie-model.ts");
+
+
+class MovieService {
+    constructor() {
+        this.api = 'http://localhost:8080/api/movie';
+        this.httpVerb = 'get';
+        this.dataType = 'json';
+    }
+    getAll() {
+        this.uri = this.api;
+        return this.httpClient();
+    }
+    getByTitle(title) {
+        this.uri = `${this.api}/byTitle?t=${title}`;
+        return this.httpClient();
+    }
+    httpClient() {
+        return new Promise((resolve) => {
+            let movies = new Array();
+            jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
+                url: this.uri,
+                method: this.httpVerb,
+                dataType: this.dataType,
+                success: (response) => {
+                    movies = response.map((movie, index) => {
+                        return new _models_movie_model__WEBPACK_IMPORTED_MODULE_1__["MovieModel"]().deserialize(movie);
+                    });
+                    resolve(movies);
+                }
+            });
+        });
+    }
+}
+
 
 /***/ }),
 
@@ -9541,7 +9794,7 @@ class SpinnerLoader {
         const inner = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
         inner.addClass('inner-loader');
         const spinner = jquery__WEBPACK_IMPORTED_MODULE_0__('<img>');
-        spinner.attr('src', '/assets/images/loader.gif');
+        spinner.attr('src', '/assets/images/blue-cat-spinner.gif');
         // Stack DOM elements into loader property
         inner.append(spinner); // Stack spinner into inner
         this.loader.append(inner); // Stack inner into outer
