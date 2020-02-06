@@ -9643,7 +9643,7 @@ class SearchComponent {
     _setHandler() {
         jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', // Dès qu'on relâche la touche, l'événement se déclenche
         (event) => {
-            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
+            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target); // on définit la variable qui suit l'input du User
             // SI il y a au moins 2 caractères recherchés
             if (searchField.val().toString().trim().length >= 2) {
                 this.spinner.present();
@@ -9655,10 +9655,11 @@ class SearchComponent {
                     if (!this._compareTo(movies)) {
                         this.movies = movies;
                         this._removeRows();
-                        // Pour chaque élément movie au sein de movies, qu'on suit avec son index
+                        // Pour chaque élément movie au sein de movies, qu'on suit (pas... ?) avec son index
                         movies.forEach((movie, index) => {
+                            // On crée une ligne
                             const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_3__["RowComponent"](movie);
-                            // Pour tout rang du movie, l'ajouter au tableau tbody
+                            // On ajoute cette ligne au tableau tbody
                             rowComponent.load().then((row) => {
                                 jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
                             });
@@ -9678,6 +9679,8 @@ class SearchComponent {
         jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
             this._removeRows();
         });
+    }
+    _disableFav() {
     }
     _removeRows() {
         jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();

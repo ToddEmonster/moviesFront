@@ -25,7 +25,7 @@ export class SearchComponent {
         $('[type="search"]').on(
             'keyup', // Dès qu'on relâche la touche, l'événement se déclenche
             (event: any): void => {
-                const searchField: JQuery = $(event.target);
+                const searchField: JQuery = $(event.target); // on définit la variable qui suit l'input du User
 
                 // SI il y a au moins 2 caractères recherchés
                 if (searchField.val().toString().trim().length >= 2) {
@@ -38,10 +38,11 @@ export class SearchComponent {
                         if (!this._compareTo(movies)) {
                             this.movies = movies;
                             this._removeRows();
-                            // Pour chaque élément movie au sein de movies, qu'on suit avec son index
+                            // Pour chaque élément movie au sein de movies, qu'on suit (pas... ?) avec son index
                             movies.forEach((movie: MovieModel, index: number) => {
+                                // On crée une ligne
                                 const rowComponent: RowComponent = new RowComponent(movie);
-                                // Pour tout rang du movie, l'ajouter au tableau tbody
+                                // On ajoute cette ligne au tableau tbody
                                 rowComponent.load().then((row: JQuery) => {
                                     $('tbody').append(row);
                                 });
@@ -65,6 +66,10 @@ export class SearchComponent {
                 this._removeRows();
             }
         );
+    }
+
+    private _disableFav(): void {
+
     }
 
     private _removeRows(): void {

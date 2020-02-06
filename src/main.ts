@@ -1,9 +1,6 @@
 import * as $ from 'jquery';
 
-import { ManageCheckbox } from "./manage-checkbox";
 import { SpinnerLoader } from "./spinner-loader";
-import { MovieService } from './services/movie-service';
-import { MovieModel } from './models/movie-model';
 import { SearchComponent } from './search-component';
 import { Favorite } from './favorite';
 
@@ -37,3 +34,4 @@ document.addEventListener(
         new Main();
     }
 );
+
