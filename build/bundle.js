@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*!
  * jQuery JavaScript Library v3.4.1
@@ -9484,105 +9484,6 @@ class RowComponent {
 
 /***/ }),
 
-/***/ "./src/components/search-component.ts":
-/*!********************************************!*\
-  !*** ./src/components/search-component.ts ***!
-  \********************************************/
-/*! exports provided: SearchComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/movie-service */ "./src/services/movie-service.ts");
-/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../models/movie-model */ "./src/models/movie-model.ts");
-/* harmony import */ var _row_row_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./row/row-component */ "./src/components/row/row-component.ts");
-/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../manage-checkbox */ "./src/manage-checkbox.ts");
-/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../spinner-loader */ "./src/spinner-loader.ts");
-
-
-
-
-
-
-class SearchComponent {
-    // Dès qu'on instancie la classe, il construit l'instance avec ses deux attributs :
-    // - l'attribut service est une nouvelle instanciation d'un MovieService, qui sera utilisée dans la méthode privée
-    // - la méthode privée _setHandlers qu'on a définie plus bas, c'est elle qui fait tout
-    constructor() {
-        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
-        this.movies = new Array();
-        this.spinner = new _spinner_loader__WEBPACK_IMPORTED_MODULE_5__["SpinnerLoader"]();
-        this._setHandler();
-    }
-    // Methode privée de la classe
-    _setHandler() {
-        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', // Dès qu'on relâche la touche, l'événement se déclenche
-        (event) => {
-            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
-            // SI il y a au moins 2 caractères recherchés
-            if (searchField.val().toString().trim().length >= 2) {
-                this.spinner.present();
-                // Call service...
-                // Je récupère le movie dont le titre partiel correspond à la recherche
-                this.service.getByTitle(searchField.val().toString().trim())
-                    // et à ce moment-là je crée une instance movies de type "tableau d'éléments de type MovieModel"
-                    .then((movies) => {
-                    if (!this._compareTo(movies)) {
-                        this.movies = movies;
-                        this._removeRows();
-                        // Pour chaque élément movie au sein de movies, qu'on suit avec son index
-                        movies.forEach((movie, index) => {
-                            const rowComponent = new _row_row_component__WEBPACK_IMPORTED_MODULE_3__["RowComponent"](movie);
-                            // Pour tout rang du movie, l'ajouter au tableau tbody
-                            rowComponent.load().then((row) => {
-                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
-                            });
-                        });
-                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
-                    }
-                });
-                this.spinner.dismiss();
-            }
-            else {
-                // Removes all previous rows
-                this._removeRows();
-                this.movies = [];
-            }
-        });
-        // "Dès qu'il y a une recherche, on efface TOUS les rows"
-        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
-            this._removeRows();
-        });
-    }
-    _removeRows() {
-        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
-    }
-    _compareTo(movies) {
-        let isEqual = false;
-        const input = movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
-        const state = this.movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
-        if (state.length !== 0) {
-            if (input.length === state.length) {
-                state.forEach((stateMovie, index) => {
-                    if (stateMovie.compareTo(input[index])) {
-                        isEqual = true;
-                    }
-                    else {
-                        isEqual = false;
-                    }
-                });
-            }
-        }
-        return isEqual;
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -9593,7 +9494,7 @@ class SearchComponent {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
-/* harmony import */ var _components_search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/search-component */ "./src/components/search-component.ts");
+/* harmony import */ var _search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./search-component */ "./src/search-component.ts");
 
 
 /**
@@ -9609,7 +9510,8 @@ class Main {
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
         loader.dismiss();
-        const searchComponent = new _components_search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
+        const searchComponent = new _search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
+        // const Favorites: Favorite = new Favorite();
     }
 }
 // Main app instanciation
@@ -9698,6 +9600,105 @@ class MovieModel {
         this._title = movie.title;
         this._year = movie.year;
         return this;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/search-component.ts":
+/*!*********************************!*\
+  !*** ./src/search-component.ts ***!
+  \*********************************/
+/*! exports provided: SearchComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/movie-service */ "./src/services/movie-service.ts");
+/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./models/movie-model */ "./src/models/movie-model.ts");
+/* harmony import */ var _components_row_row_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/row/row-component */ "./src/components/row/row-component.ts");
+/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
+/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
+
+
+
+
+
+
+class SearchComponent {
+    // Dès qu'on instancie la classe, il construit l'instance avec ses deux attributs :
+    // - l'attribut service est une nouvelle instanciation d'un MovieService, qui sera utilisée dans la méthode privée
+    // - la méthode privée _setHandlers qu'on a définie plus bas, c'est elle qui fait tout
+    constructor() {
+        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
+        this.movies = new Array();
+        this.spinner = new _spinner_loader__WEBPACK_IMPORTED_MODULE_5__["SpinnerLoader"]();
+        this._setHandler();
+    }
+    // Methode privée de la classe
+    _setHandler() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', // Dès qu'on relâche la touche, l'événement se déclenche
+        (event) => {
+            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
+            // SI il y a au moins 2 caractères recherchés
+            if (searchField.val().toString().trim().length >= 2) {
+                this.spinner.present();
+                // Call service...
+                // Je récupère le movie dont le titre partiel correspond à la recherche
+                this.service.getByTitle(searchField.val().toString().trim())
+                    // et à ce moment-là je crée une instance movies de type "tableau d'éléments de type MovieModel"
+                    .then((movies) => {
+                    if (!this._compareTo(movies)) {
+                        this.movies = movies;
+                        this._removeRows();
+                        // Pour chaque élément movie au sein de movies, qu'on suit avec son index
+                        movies.forEach((movie, index) => {
+                            const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_3__["RowComponent"](movie);
+                            // Pour tout rang du movie, l'ajouter au tableau tbody
+                            rowComponent.load().then((row) => {
+                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                            });
+                        });
+                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
+                    }
+                });
+                this.spinner.dismiss();
+            }
+            else {
+                // Removes all previous rows
+                this._removeRows();
+                this.movies = [];
+            }
+        });
+        // "Dès qu'il y a une recherche, on efface TOUS les rows"
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
+            this._removeRows();
+        });
+    }
+    _removeRows() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
+    }
+    _compareTo(movies) {
+        let isEqual = false;
+        const input = movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        const state = this.movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        if (state.length !== 0) {
+            if (input.length === state.length) {
+                state.forEach((stateMovie, index) => {
+                    if (stateMovie.compareTo(input[index])) {
+                        isEqual = true;
+                    }
+                    else {
+                        isEqual = false;
+                    }
+                });
+            }
+        }
+        return isEqual;
     }
 }
 

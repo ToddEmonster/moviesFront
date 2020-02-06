@@ -4,7 +4,8 @@ import { ManageCheckbox } from "./manage-checkbox";
 import { SpinnerLoader } from "./spinner-loader";
 import { MovieService } from './services/movie-service';
 import { MovieModel } from './models/movie-model';
-import { SearchComponent } from './components/search-component';
+import { SearchComponent } from './search-component';
+import { Favorite } from './favorite';
 
 /**
  * @name Main
@@ -23,6 +24,8 @@ class Main {
         loader.dismiss();
 
         const searchComponent: SearchComponent = new SearchComponent();
+
+        // const Favorites: Favorite = new Favorite();
     }
 }
 

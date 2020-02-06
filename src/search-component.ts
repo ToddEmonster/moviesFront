@@ -1,9 +1,9 @@
 import * as $ from 'jquery';
-import { MovieService } from '../services/movie-service';
-import { MovieModel } from '../models/movie-model';
-import { RowComponent } from './row/row-component';
-import { ManageCheckbox } from '../manage-checkbox';
-import { SpinnerLoader } from '../spinner-loader';
+import { MovieService } from './services/movie-service';
+import { MovieModel } from './models/movie-model';
+import { RowComponent } from './components/row/row-component';
+import { ManageCheckbox } from './manage-checkbox';
+import { SpinnerLoader } from './spinner-loader';
 
 export class SearchComponent {
     private service: MovieService;
